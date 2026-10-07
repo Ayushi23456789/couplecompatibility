@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Couple Compatibility ❤️</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+  min-height: 100vh;
+  color: #333;
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 25px;
+  padding: 25px;
+  margin-top: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+h1, h2 {
+  text-align: center;
+  color: #e91e63;
+}
+
+.subtitle {
+  text-align: center;
+  color: #777;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #e91e63;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #c2185b;
+}
+
+.secondary {
+  background: #9c27b0;
+}
+
+.hidden {
+  display: none;
+}
+
+.room-code {
+  background: #ffe4ec;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: #e91e63;
+  margin: 15px 0;
+}
+
+.progress-container {
+  background: #eee;
+  border-radius: 20px;
+  height: 12px;
+  margin: 15px 0 25px;
+}
+
+.progress {
+  height: 100%;
+  width: 0%;
+  background: #e91e63;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.question-number {
+  color: #e91e63;
+  font-weight: bold;
+}
+
+.question {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px 0 20px;
+}
+
+.option {
+  display: block;
+  padding: 14px;
+  margin: 10px 0;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.option:hover {
+  border-color: #e91e63;
+  background: #fff0f5;
+}
+
+.option.selected {
+  border-color: #e91e63;
+  background: #ffe4ec;
+}
+
+.option input {
+  width: auto;
+  margin-right: 10px;
+}
+
+.status {
+  text-align: center;
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.score {
+  text-align: center;
+  font-size: 55px;
+  font-weight: bold;
+  color: #e91e63;
+  margin: 20px 0;
+}
+
+.match {
+  background: #e8f5e9;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+.different {
+  background: #ffebee;
+  padding: 12px;
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+.small {
+  font-size: 14px;
+  color: #777;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.copy-button {
+  background: #ff9800;
+}
+
+.copy-button:hover {
+  background: #f57c00;
+}
+
+.error {
+  color: #d32f2f;
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="homePage" class="card">
+
+  <h1>Couple Compatibility ❤️</h1>
+
+  <p class="subtitle">
+    Find out how compatible you and your partner really are!
+  </p>
+
+  <input
+    type="text"
+    id="nameInput"
+    placeholder="Enter your name"
+    maxlength="30"
+  >
+
+  <button onclick="createQuiz()">
+    💕 Create New Couple Quiz
+  </button>
+
+  <hr style="margin:25px 0;border:none;border-top:1px solid #eee;">
+
+  <input
+    type="text"
+    id="roomInput"
+    placeholder="Enter 6-digit room code"
+    maxlength="6"
+    inputmode="numeric"
+  >
+
+  <button class="secondary" onclick="joinQuiz()">
+    💌 Join Existing Quiz
+  </button>
+
+  <p id="homeMessage" class="small"></p>
+
+</div>
+
+
+<!-- QUIZ -->
+<div id="quizPage" class="card hidden">
+
+  <h2>Couple Quiz ❤️</h2>
+
+  <div class="room-code" id="quizRoomCode"></div>
+
+  <button class="copy-button" onclick="copyRoomCode()">
+    📋 Copy Room Code
+  </button>
+
+  <div class="status" id="partnerStatus">
+    Waiting for partner...
+  </div>
+
+  <div class="progress-container">
+    <div class="progress" id="progressBar"></div>
+  </div>
+
+  <div class="question-number" id="questionNumber"></div>
+
+  <div class="question" id="questionText"></div>
+
+  <div id="optionsContainer"></div>
+
+  <button onclick="nextQuestion()" id="nextButton">
+    Next →
+  </button>
+
+</div>
+
+
+<!-- WAITING -->
+<div id="waitingPage" class="card hidden">
+
+  <h2>Answers Submitted ❤️</h2>
+
+  <div class="room-code" id="waitingRoomCode"></div>
+
+  <p style="text-align:center;">
+    Your answers have been saved.
+  </p>
+
+  <div class="loading">
+    ⏳ Waiting for your partner to finish...
+  </div>
+
+  <div class="status" id="waitingStatus">
+    Waiting for both partners...
+  </div>
+
+</div>
+
+
+<!-- RESULT -->
+<div id="resultPage" class="card hidden">
+
+  <h1>Compatibility Result 💕</h1>
+
+  <p id="namesResult" class="subtitle"></p>
+
+  <div class="score" id="score"></div>
+
+  <p class="subtitle">
+    Your Couple Compatibility
+  </p>
+
+  <h2>❤️ Matching Answers</h2>
+
+  <div id="matchingAnswers"></div>
+
+  <h2>💭 Different Answers</h2>
+
+  <div id="differentAnswers"></div>
+
+  <button onclick="location.reload()">
+    🔄 Take Again
+  </button>
+
+</div>
+
+</div>
+
+
+<script type="module">
+
+/* =========================================
+   FIREBASE IMPORTS
+========================================= */
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  signInAnonymously
+}
+from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+
+/* =========================================
+   FIREBASE CONFIG
+========================================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCrvmJseUq285ewvkc2pLCE2f1ftmgSFWI",
+  authDomain: "couple-quiz-9c59b.firebaseapp.com",
+  projectId: "couple-quiz-9c59b",
+  storageBucket: "couple-quiz-9c59b.firebasestorage.app",
+  messagingSenderId: "44788801949",
+  appId: "1:44788801949:web:c27a90bee7f5507a7e8f74"
+};
+
+
+/* =========================================
+   FIREBASE START
+========================================= */
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+await signInAnonymously(auth);
+
+const currentUser = auth.currentUser;
+
+
+/* =========================================
+   50 QUESTIONS
+========================================= */
+
+const questions = [
+
+"What is your ideal date?",
+
+"Who is more likely to say sorry first?",
+
+"What is your partner's biggest dream?",
+
+"Who is more romantic?",
+
+"What is your partner's favorite food?",
+
+"Who gets jealous more easily?",
+
+"What is your partner's favorite color?",
+
+"Who is more likely to plan a surprise?",
+
+"Where would your partner love to travel?",
+
+"Who is more stubborn?",
+
+"What is your partner's favorite movie genre?",
+
+"Who spends more money?",
+
+"What makes your partner happiest?",
+
+"Who is more likely to fall asleep first?",
+
+"What is your partner's dream job?",
+
+"Who is more emotional?",
+
+"What is your partner's favorite season?",
+
+"Who is more likely to start an argument?",
+
+"What is your partner's biggest fear?",
+
+"Who is better at keeping secrets?",
+
+"What would your partner choose: beach or mountains?",
+
+"Who is more adventurous?",
+
+"What is your partner's favorite drink?",
+
+"Who is more likely to be late?",
+
+"What is your partner's love language?",
+
+"Who is more likely to make the first move?",
+
+"What is your partner's favorite type of music?",
+
+"Who is more protective?",
+
+"What is your partner's biggest weakness?",
+
+"Who is better at making decisions?",
+
+"Where would your partner want to live?",
+
+"Who is more talkative?",
+
+"What is your partner's favorite dessert?",
+
+"Who is more likely to cry during a movie?",
+
+"What is your partner's dream car?",
+
+"Who is more organized?",
+
+"What is your partner's favorite holiday?",
+
+"Who is more likely to forgive quickly?",
+
+"What does your partner value most in a relationship?",
+
+"Who is more playful?",
+
+"What is your partner's biggest goal?",
+
+"Who is more likely to wake up early?",
+
+"What is your partner's favorite activity?",
+
+"Who is more competitive?",
+
+"What makes your partner angry?",
+
+"Who is more likely to initiate a hug?",
+
+"What is your partner's perfect weekend?",
+
+"Who is more confident?",
+
+"What does your partner love most about you?",
+
+"Would your partner choose love or money?"
+
+];
+
+
+/* =========================================
+   VARIABLES
+========================================= */
+
+let roomCode = "";
+
+let myName = "";
+
+let myUserId = currentUser.uid;
+
+let currentQuestion = 0;
+
+let answers = [];
+
+let
